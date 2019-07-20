@@ -93,6 +93,7 @@ export default {
           _data => {
             let { msg, code, data } = _data;
             if (code == 200) {
+              console.log();
               sessionStorage.setItem('nickname', JSON.stringify(data.user.nickname));
               that.$store.dispatch('setToken', data.token).then(() => {
                 that.$router.push({path: '/'})

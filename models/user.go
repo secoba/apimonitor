@@ -135,3 +135,13 @@ func UserUpdate(user *User, fields ...string) error {
 	_, err := orm.NewOrm().Update(user, fields...)
 	return err
 }
+
+
+func UserInit() {
+	var userinfo User 
+	userinfo.Phone = "13041195556"
+	userinfo.UserName = "xuchengzhi"
+	userinfo.Nickname = "许成志"
+	userinfo.Password = "e10adc3949ba59abbe56e057f20f883e"
+	CreateUser(userinfo)
+}

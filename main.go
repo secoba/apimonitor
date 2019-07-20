@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/xuchengzhi/apimonitor/models"
+	// "github.com/xuchengzhi/apimonitor/controllers"
 	_ "github.com/xuchengzhi/apimonitor/routers"
 	// "context"
 	// "apimonitor/Libs"
@@ -13,6 +14,7 @@ import (
 func main() {
 	// go rpcserver.Run()
 	models.Init()
+	models.UserInit()
 	beego.Run()
 	beego.SetStaticPath("/static", "./static")
 	beego.SetStaticPath("/image", "./image")

@@ -33,6 +33,10 @@ type UserJson struct {
 	Password string
 }
 
+
+
+
+
 // @Title 注册新用户
 // @Description 用户注册
 // @Param	phone		formData 	string	true 		"用户手机号"
@@ -157,3 +161,5 @@ func (this *UserController) Auth() {
 	this.Data["json"] = Response{200, "success.", "is login"}
 	this.ServeJSON()
 }
+
+

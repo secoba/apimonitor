@@ -2,8 +2,8 @@ package controllers
 
 import (
 	// "crypto"
-	"apimonitor/models"
-	"apimonitor/utils"
+	"github.com/xuchengzhi/apimonitor/models"
+	"github.com/xuchengzhi/apimonitor/utils"
 	"fmt"
 	"github.com/astaxie/beego/validation"
 

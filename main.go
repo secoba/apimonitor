@@ -1,8 +1,8 @@
 package main
 
 import (
-	"apimonitor/models"
-	_ "apimonitor/routers"
+	"github.com/xuchengzhi/apimonitor/models"
+	_ "github.com/xuchengzhi/apimonitor/routers"
 	// "context"
 	// "apimonitor/Libs"
 	"github.com/astaxie/beego"

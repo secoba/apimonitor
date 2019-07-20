@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"apimonitor/controllers"
+	"github.com/xuchengzhi/apimonitor/controllers"
 	"github.com/astaxie/beego"
 )
 

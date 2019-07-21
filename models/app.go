@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
 	"time"
+	"log"
 )
 
 type App struct {
@@ -24,9 +25,6 @@ func (u *App) TableName() string {
 	return TableName("apps")
 }
 
-// func init() {
-	
-// }
 
 func Apps() orm.QuerySeter {
 	return orm.NewOrm().QueryTable(new(App))
@@ -41,4 +39,12 @@ func AddApps(app App) App {
 	}
 	fmt.Println(st)
 	return app
+}
+
+func Applist()  {
+	
+
+	apps,_ := orm.NewOrm().QueryTable(TableName("apps")).Filter("types", "ios").Count()
+	
+	log.Println(apps)
 }

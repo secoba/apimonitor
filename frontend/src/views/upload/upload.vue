@@ -18,7 +18,7 @@
     <p>使用 before-upload 限制用户上传的图片格式和大小。</p>
     <el-upload
       class="avatar-uploader"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://localhost/v1/app/fileup"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
       :before-upload="beforeAvatarUpload">

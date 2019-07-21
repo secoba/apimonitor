@@ -65,10 +65,6 @@ func (this *AppController) FileUp() {
         return 
     }
 
-
-
-	
-
 	var app_info AppJson
 	var appname string
 
@@ -120,7 +116,7 @@ func (this *AppController) FileUp() {
 		this.ServeJSON()
 		return
 	}
-	
+
 
 	app := models.App{
 		Name:   app_info.AppName,
@@ -134,4 +130,14 @@ func (this *AppController) FileUp() {
 	}
 	this.Data["json"] = Response{200, "success.", models.AddApps(app)}
 	this.ServeJSON()
+}
+
+
+func (this *AppController) Applist() {
+	// var app_info AppJson
+	models.Applist()
+	this.Ctx.ResponseWriter.WriteHeader(423)
+	this.Data["json"] = ErrAppTypeErr
+	this.ServeJSON()
+    return 
 }

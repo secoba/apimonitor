@@ -43,4 +43,13 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:AppController"] = append(beego.GlobalControllerRouter["apimonitor/controllers:AppController"],
+        beego.ControllerComments{
+            Method: "Applist",
+            Router: `/applist`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
 }

@@ -28,6 +28,7 @@ func (u *User) TableName() string {
 
 func init() {
 	orm.RegisterModel(new(User))
+	orm.RegisterModel(new(App))
 }
 
 func Users() orm.QuerySeter {

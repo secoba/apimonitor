@@ -18,6 +18,9 @@ func main() {
 	beego.Run()
 	beego.SetStaticPath("/static", "./static")
 	beego.SetStaticPath("/image", "./image")
-	beego.BConfig.RouterCaseSensitive = false
-	beego.BConfig.Listen.Graceful = true
+	// beego.BConfig.RouterCaseSensitive = false
+	// beego.BConfig.WebConfig.ViewsPath="views"
+
+
+
 }

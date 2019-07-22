@@ -143,7 +143,7 @@ func (this *AppController) Applist() {
 	// apps := models.Applist()
 	var app_info AppJson
 	this.Ctx.ResponseWriter.WriteHeader(200)
-	this.Data["json"] = Response{200, "success.", models.Applist(app_info)}
+	this.Data["json"] = Response{200, "success.", models.Applist()}
 	this.ServeJSON()
 	return
 }

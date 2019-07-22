@@ -46,7 +46,7 @@
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.22.0",
     "chalk": "^2.0.1",
-    "chromedriver": "^2.27.2",
+    "chromedriver": "^2.46.0",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^5.0.1",
     "css-loader": "^3.1.0",
@@ -89,7 +89,6 @@
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.1.0"
   },
   "engines": {

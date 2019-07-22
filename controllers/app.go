@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/satori/go.uuid"
 	"github.com/xuchengzhi/Library/AppInfo"
+	"github.com/xuchengzhi/Library/Encryption"
 	"github.com/xuchengzhi/apimonitor/models"
 	"path"
 	"path/filepath"
@@ -123,6 +124,14 @@ func (this *AppController) FileUp() {
 			app_info.Name = "写字先生"
 		}
 	}
+	u2 := fmt.Sprintf("%v", uuid.Must(uuid.NewV4()))
+	stat, url := models.CheckUrl(app_info.AppName)
+	var PageUrl string
+	if stat {
+		PageUrl = url
+	} else {
+		PageUrl = XorEnc.Gmd5(u2)
+	}
 
 	app := models.App{
 		Name:     app_info.AppName,
@@ -133,17 +142,44 @@ func (this *AppController) FileUp() {
 		Oldname:  filename,
 		Types:    app_info.Apptype,
 		Describe: "",
+		Url:      PageUrl,
 	}
+
 	this.Data["json"] = Response{200, "success.", models.AddApps(app)}
 	this.ServeJSON()
 }
 
 func (this *AppController) Applist() {
-	// var app_info AppJson
-	// apps := models.Applist()
-	// var app_info AppJson
-	this.Ctx.ResponseWriter.WriteHeader(200)
-	this.Data["json"] = Response{200, "success.", models.Applist()}
-	this.ServeJSON()
-	return
+
+	types := this.GetString("type")
+	AppName := this.GetString("appname")
+	// var app AppJson
+	app := models.App{
+		Name:    this.GetString("name"),
+		AppName: AppName,
+		Version: this.GetString("version"),
+		Types:   types,
+	}
+	if types != "" && AppName != "" {
+		this.Ctx.ResponseWriter.WriteHeader(200)
+		this.Data["json"] = Response{200, "success.", models.AppAny(app)}
+		this.ServeJSON()
+		return
+	} else if types != "" {
+		this.Ctx.ResponseWriter.WriteHeader(200)
+		this.Data["json"] = Response{200, "success.", models.AppByTypes(types)}
+		this.ServeJSON()
+		return
+	} else if AppName != "" {
+		this.Ctx.ResponseWriter.WriteHeader(200)
+		this.Data["json"] = Response{200, "success.", models.AppByPackage(AppName)}
+		// this.Data["json"] = Response{200, "success.", sss}
+		this.ServeJSON()
+		return
+	} else {
+		this.Ctx.ResponseWriter.WriteHeader(200)
+		this.Data["json"] = Response{200, "success.", models.AppGroup()}
+		this.ServeJSON()
+		return
+	}
 }

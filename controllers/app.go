@@ -141,8 +141,9 @@ func (this *AppController) FileUp() {
 func (this *AppController) Applist() {
 	// var app_info AppJson
 	// apps := models.Applist()
+	var app_info AppJson
 	this.Ctx.ResponseWriter.WriteHeader(200)
-	this.Data["json"] = Response{200, "success.", models.Applist()}
+	this.Data["json"] = Response{200, "success.", models.Applist(app_info)}
 	this.ServeJSON()
 	return
 }

@@ -21,6 +21,4 @@ func main() {
 	// beego.BConfig.RouterCaseSensitive = false
 	// beego.BConfig.WebConfig.ViewsPath="views"
 
-
-
 }

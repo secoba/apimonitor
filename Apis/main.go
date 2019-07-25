@@ -1,0 +1,158 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/Unknwon/goconfig"
+	"github.com/xuchengzhi/Library/Encryption"
+	"github.com/xuchengzhi/Library/Http"
+	"github.com/xuchengzhi/Library/Random"
+	"github.com/xuchengzhi/Library/Time"
+	"log"
+	"math/rand"
+	"sync"
+	// "net/url"
+	"strconv"
+	"time"
+)
+
+func init() {
+	//以时间作为初始化种子
+	rand.Seed(time.Now().UnixNano())
+}
+
+var EmailList = [...]string{"@yahoo.com", "@yahoo.com.cn", "@yahoo.com.cn.jp", "@gmail.co.jp", "@live.com", "@hotmail.com", "@yahoo.com.jp"}
+
+var cfg, _ = goconfig.LoadConfigFile("config.ini")
+
+var host, _ = cfg.GetValue("Test", "Host")
+
+//获取加密字符
+func Jiami(Bstr string) string {
+	Key, _ := cfg.GetValue("Xor", "key")
+	token := XorEnc.XorEncodeStr(Bstr, Key)
+	log.Println(Key)
+	return token
+}
+
+func SendCode() {
+	Run_sync.Add(1)
+	params := make(map[string]string)
+	params["email"] = "xuchengzhi1987@yeah.net"
+	params["device_num"] = Randoms.GetRandomString(8)
+	params["mail_type"] = "3" //strconv.Itoa(Randoms.GetRandomInt(1, 4))
+	params["client_type"] = "app"
+	params["sys"] = "ADR7.0"
+	params["clientSW"] = "1.0.0"
+	params["ptype"] = "ios12"
+	params["t"] = GetTime.TS()
+	jsonStr, err := json.Marshal(params)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmps := string(jsonStr)
+	Bstr := XorEnc.BASE64EncodeStr(tmps)
+	token := Jiami(Bstr)
+	p := make(map[string]string)
+	p["p"] = token
+	log.Println(tmps)
+	log.Println(Bstr)
+	url := fmt.Sprintf("%v/mobile.php/Users/send_code", host)
+	UrlRun.Action(url, "post", p, &Run_sync)
+}
+
+func Getpar() map[string]string {
+	num := Randoms.GetRandomInt(0, len(EmailList))
+	names := Randoms.GetRandomString(8)
+	email := fmt.Sprintf("%v%v", names, EmailList[num])
+	params := make(map[string]string)
+	params["email"] = email
+	params["device_num"] = Randoms.GetRandomString(18)
+	params["mail_type"] = strconv.Itoa(Randoms.GetRandomInt(1, 4))
+	params["client_type"] = "app"
+	params["sys"] = "ADR7.0"
+	params["clientSW"] = "1.0.0"
+	params["ptype"] = "ios12"
+	params["t"] = GetTime.TS()
+	jsonStr, err := json.Marshal(params)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmps := string(jsonStr)
+	Bstr := XorEnc.BASE64EncodeStr(tmps)
+
+	token := Jiami(Bstr)
+	log.Println(email)
+
+	p := make(map[string]string)
+	p["p"] = token
+	return p
+}
+
+func Register() {
+	Run_sync.Add(1)
+	num := Randoms.GetRandomInt(0, len(EmailList))
+	names := Randoms.GetRandomString(8)
+	email := fmt.Sprintf("%v%v", names, EmailList[num])
+	params := make(map[string]string)
+	params["email"] = "TEST" + email
+	params["pwd"] = "123456"
+	params["client_type"] = "app"
+	params["sys"] = "ADR7.0"
+	params["clientSW"] = "1.0.0"
+	params["ptype"] = "ios12"
+	params["t"] = GetTime.TS()
+	jsonStr, err := json.Marshal(params)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmps := string(jsonStr)
+	Bstr := XorEnc.BASE64EncodeStr(tmps)
+	token := Jiami(Bstr)
+	p := make(map[string]string)
+	p["p"] = token
+	log.Println(params)
+	url := fmt.Sprintf("%v/mobile.php/Users/reg_setpwd", host)
+	UrlRun.Action(url, "post", p, &Run_sync)
+}
+
+func Login() {
+	Run_sync.Add(1)
+	params := make(map[string]string)
+	params["email"] = "TESTOyehosnx@163.com"
+	params["pwd"] = "123456"
+	params["client_type"] = "app"
+	params["sys"] = "ADR7.0"
+	params["clientSW"] = "1.0.0"
+	params["ptype"] = "ios12"
+	params["t"] = GetTime.TS()
+	jsonStr, err := json.Marshal(params)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	tmps := string(jsonStr)
+	Bstr := XorEnc.BASE64EncodeStr(tmps)
+	token := Jiami(Bstr)
+	p := make(map[string]string)
+	p["p"] = token
+	url := fmt.Sprintf("%v/mobile.php/Users/email_login", host)
+	UrlRun.Action(url, "post", p, &Run_sync)
+}
+
+var Run_sync sync.WaitGroup
+
+func main() {
+	// Login()
+	// ParamsJson, err := json.Marshal(p)
+	// log.Println(string(ParamsJson))
+	Register()
+	// for i := 0; i < 10; i++ {
+	// 	p := Getpar()
+	// 	UrlRun.Action(url, "post", p)
+	// }
+
+}

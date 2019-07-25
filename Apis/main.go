@@ -10,9 +10,13 @@ import (
 	"github.com/xuchengzhi/Library/Time"
 	"log"
 	"math/rand"
+	"os"
+	"reflect"
 	"sync"
 	// "net/url"
+	// "github.com/Luxurioust/excelize"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,8 +27,10 @@ func init() {
 
 var EmailList = [...]string{"@yahoo.com", "@yahoo.com.cn", "@yahoo.com.cn.jp", "@gmail.co.jp", "@live.com", "@hotmail.com", "@yahoo.com.jp"}
 
+//读取配置文件
 var cfg, _ = goconfig.LoadConfigFile("config.ini")
 
+//读取接口地址
 var host, _ = cfg.GetValue("Test", "Host")
 
 //获取加密字符
@@ -35,6 +41,7 @@ func Jiami(Bstr string) string {
 	return token
 }
 
+//获取邮件验证码
 func SendCode() {
 	Run_sync.Add(1)
 	params := make(map[string]string)
@@ -91,6 +98,7 @@ func Getpar() map[string]string {
 	return p
 }
 
+//邮箱注册
 func Register() {
 	Run_sync.Add(1)
 	num := Randoms.GetRandomInt(0, len(EmailList))
@@ -119,6 +127,7 @@ func Register() {
 	UrlRun.Action(url, "post", p, &Run_sync)
 }
 
+//登录
 func Login() {
 	Run_sync.Add(1)
 	params := make(map[string]string)
@@ -139,17 +148,22 @@ func Login() {
 	token := Jiami(Bstr)
 	p := make(map[string]string)
 	p["p"] = token
+	log.Println(tmps)
 	url := fmt.Sprintf("%v/mobile.php/Users/email_login", host)
 	UrlRun.Action(url, "post", p, &Run_sync)
 }
 
 var Run_sync sync.WaitGroup
 
+type ApiINfo struct {
+	ApiPath string
+	Apipar  map[string]string
+}
+
 func main() {
-	// Login()
 	// ParamsJson, err := json.Marshal(p)
 	// log.Println(string(ParamsJson))
-	Register()
+	// Register()
 	// for i := 0; i < 10; i++ {
 	// 	p := Getpar()
 	// 	UrlRun.Action(url, "post", p)

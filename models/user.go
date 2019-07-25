@@ -19,7 +19,7 @@ type User struct {
 	LastLogin int64
 	LastIp    string
 	Status    int
-	Uimages   string `orm:"default(/static/usr/)"`
+	Uimages   string `orm:"default(/static/usr/1.jpg)"`
 }
 
 func (u *User) TableName() string {
@@ -137,9 +137,8 @@ func UserUpdate(user *User, fields ...string) error {
 	return err
 }
 
-
 func UserInit() {
-	var userinfo User 
+	var userinfo User
 	userinfo.Phone = "13041195556"
 	userinfo.UserName = "xuchengzhi"
 	userinfo.Nickname = "许成志"

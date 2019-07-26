@@ -38,6 +38,13 @@ type AppJson struct {
 	Describe string
 }
 
+func (this *AppController) TestApis() {
+	this.Ctx.ResponseWriter.WriteHeader(200)
+	this.Data["json"] = Response{200, "success.", "ok"}
+	this.ServeJSON()
+	return
+}
+
 func (this *AppController) FileUp() {
 	file, head, err := this.GetFile("file")
 	u1 := uuid.Must(uuid.NewV4())

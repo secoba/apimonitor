@@ -15,6 +15,8 @@ type User struct {
 	Updated   time.Time `json:"-" orm:"column(update_at);auto_now;type(datetime)"`
 	UserName  string    `json:"username" orm:"column(username);unique;size(40);"`
 	Salt      string
+	Project   []*Projects `orm:"reverse(many)"`
+	Apis      []*Api      `orm:"reverse(many)"`
 	Email     string
 	LastLogin int64
 	LastIp    string

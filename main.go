@@ -15,6 +15,7 @@ func main() {
 	// go rpcserver.Run()
 	models.Init()
 	models.UserInit()
+	models.ApiInit()
 	beego.Run()
 	beego.SetStaticPath("/static", "./static")
 	beego.SetStaticPath("/image", "./image")

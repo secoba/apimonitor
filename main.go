@@ -17,8 +17,8 @@ func main() {
 	models.UserInit()
 	models.ApiInit()
 	beego.Run()
-	beego.SetStaticPath("/static", "./static")
-	beego.SetStaticPath("/image", "./image")
+	// beego.SetStaticPath("/static", "./static")
+	beego.SetStaticPath("/static", "./img")
 	// beego.BConfig.RouterCaseSensitive = false
 	// beego.BConfig.WebConfig.ViewsPath="views"
 

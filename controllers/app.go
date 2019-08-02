@@ -36,6 +36,7 @@ type AppJson struct {
 	OldName  string
 	Apptype  string
 	Describe string
+	Img      string
 }
 
 func (this *AppController) TestApis() {
@@ -98,6 +99,7 @@ func (this *AppController) FileUp() {
 			app_info.OldName = filename
 			app_info.MVersion = tmp.VCode
 			app_info.Apptype = "android"
+			app_info.Img = "/img/blob.png"
 		}
 
 		if tmp.Name == "com.handwriting.makefont" {
@@ -111,9 +113,10 @@ func (this *AppController) FileUp() {
 		fullName = strings.Replace(fullName, "\\", "/", -1)
 		fullName = strings.Replace(fullName, "/IOS", "", -1)
 		stat, tmps := CheckApp.IOS(fullName + "/" + appname)
-
+		log.Println(tmps)
 		if stat {
 			app_info.AppName = tmps.Name
+			// app_info.Name = tmps.packageName
 			app_info.Version = tmps.Version
 			app_info.OldName = filename
 			app_info.MVersion = tmps.VCode
@@ -125,11 +128,11 @@ func (this *AppController) FileUp() {
 			return
 		}
 
-		if tmps.Name == "me.myfont.HandFontMaker" {
-			app_info.Name = "手迹造字"
-		} else if tmps.Name == "com.founder.MrWrite" {
-			app_info.Name = "写字先生"
-		}
+		// if tmps.Name == "me.myfont.HandFontMaker" {
+		// 	app_info.Name = "手迹造字"
+		// } else if tmps.Name == "com.founder.MrWrite" {
+		// 	app_info.Name = "写字先生"
+		// }
 	}
 	u2 := fmt.Sprintf("%v", uuid.Must(uuid.NewV4()))
 	stat, url := models.CheckUrl(app_info.AppName)
@@ -150,6 +153,7 @@ func (this *AppController) FileUp() {
 		Types:    app_info.Apptype,
 		Describe: "",
 		Url:      PageUrl,
+		Img:      app_info.Img,
 	}
 
 	this.Data["json"] = Response{200, "success.", models.AddApps(app)}

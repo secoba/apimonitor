@@ -8,15 +8,16 @@ import (
 	"github.com/xuchengzhi/Library/Http"
 	"github.com/xuchengzhi/Library/Random"
 	"github.com/xuchengzhi/Library/Time"
+	"golang.org/x/net/context"
 	"log"
 	"math/rand"
-	"os"
-	"reflect"
+	// "os"
+	// "reflect"
 	"sync"
 	// "net/url"
 	// "github.com/Luxurioust/excelize"
 	"strconv"
-	"strings"
+	// "strings"
 	"time"
 )
 
@@ -24,6 +25,10 @@ func init() {
 	//以时间作为初始化种子
 	rand.Seed(time.Now().UnixNano())
 }
+
+var (
+	wg sync.WaitGroup
+)
 
 var EmailList = [...]string{"@yahoo.com", "@yahoo.com.cn", "@yahoo.com.cn.jp", "@gmail.co.jp", "@live.com", "@hotmail.com", "@yahoo.com.jp"}
 
@@ -37,7 +42,6 @@ var host, _ = cfg.GetValue("Test", "Host")
 func Jiami(Bstr string) string {
 	Key, _ := cfg.GetValue("Xor", "key")
 	token := XorEnc.XorEncodeStr(Bstr, Key)
-	log.Println(Key)
 	return token
 }
 
@@ -131,8 +135,8 @@ func Register() {
 func Login() {
 	Run_sync.Add(1)
 	params := make(map[string]string)
-	params["email"] = "TESTOyehosnx@163.com"
-	params["pwd"] = "123456"
+	params["email"] = "xudear@live.com"
+	params["pwd"] = XorEnc.Gmd5("123456")
 	params["client_type"] = "app"
 	params["sys"] = "ADR7.0"
 	params["clientSW"] = "1.0.0"
@@ -150,7 +154,7 @@ func Login() {
 	p["p"] = token
 	log.Println(tmps)
 	url := fmt.Sprintf("%v/mobile.php/Users/email_login", host)
-	UrlRun.Action(url, "post", p, &Run_sync)
+	UrlRun.PressureRun(1000, url, "post", p)
 }
 
 var Run_sync sync.WaitGroup
@@ -160,13 +164,34 @@ type ApiINfo struct {
 	Apipar  map[string]string
 }
 
-func main() {
-	// ParamsJson, err := json.Marshal(p)
-	// log.Println(string(ParamsJson))
-	// Register()
-	// for i := 0; i < 10; i++ {
-	// 	p := Getpar()
-	// 	UrlRun.Action(url, "post", p)
-	// }
+func work(ctx context.Context) error {
+	defer wg.Done()
 
+	for i := 0; i < 1000; i++ {
+		select {
+		case <-time.After(2 * time.Second):
+			fmt.Println("Doing some work ", i)
+			return ctx.Err()
+
+		// we received the signal of cancelation in this channel
+		case <-ctx.Done():
+			fmt.Println("Cancel the context ", i)
+			return ctx.Err()
+		}
+	}
+	return nil
+}
+
+func main() {
+	// ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	// defer cancel()
+
+	// fmt.Println("Hey, I'm going to do some work")
+
+	// wg.Add(1)
+	// go work(ctx)
+	// wg.Wait()
+
+	// fmt.Println("Finished. I'm going home")
+	Login()
 }

@@ -20,6 +20,7 @@ type App struct {
 	Types    string    `gorm:"not null Text(191)"`
 	Describe string    `gorm:"Text(191)"`
 	Url      string    `gorm:"Text(191)"`
+	Img      string    `gorm:"Text(191)"`
 }
 
 func (u *App) TableName() string {

@@ -11,6 +11,8 @@ import (
 	"golang.org/x/net/context"
 	"log"
 	"math/rand"
+	// "net/url"
+
 	// "os"
 	// "reflect"
 	"sync"
@@ -49,9 +51,9 @@ func Jiami(Bstr string) string {
 func SendCode() {
 	Run_sync.Add(1)
 	params := make(map[string]string)
-	params["email"] = "xuchengzhi1987@yeah.net"
+	params["email"] = "496853071@qq.com"
 	params["device_num"] = Randoms.GetRandomString(8)
-	params["mail_type"] = "3" //strconv.Itoa(Randoms.GetRandomInt(1, 4))
+	params["mail_type"] = "1" //strconv.Itoa(Randoms.GetRandomInt(1, 4))
 	params["client_type"] = "app"
 	params["sys"] = "ADR7.0"
 	params["clientSW"] = "1.0.0"
@@ -193,5 +195,6 @@ func main() {
 	// wg.Wait()
 
 	// fmt.Println("Finished. I'm going home")
-	Login()
+	// Login()
+	// SendCode()
 }

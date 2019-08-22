@@ -6,8 +6,8 @@
 package routers
 
 import (
-	"github.com/xuchengzhi/apimonitor/controllers"
 	"github.com/astaxie/beego"
+	"github.com/xuchengzhi/apimonitor/controllers"
 )
 
 func init() {
@@ -22,6 +22,11 @@ func init() {
 		beego.NSNamespace("/app",
 			beego.NSInclude(
 				&controllers.AppController{},
+			),
+		),
+		beego.NSNamespace("/thrift",
+			beego.NSInclude(
+				&controllers.ThriftController{},
 			),
 		),
 	)

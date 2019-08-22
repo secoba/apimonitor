@@ -60,4 +60,13 @@ func init() {
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "ThriftTest",
+			Router:           `/Test`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
 }

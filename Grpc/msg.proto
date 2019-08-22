@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package Grpc;
+
+service MsgService {
+ rpc GetMsg (MsgRequest) returns (MsgResponse){}
+}
+ 
+message MsgRequest {
+  string name = 1;
+}
+ 
+message MsgResponse {
+  string msg = 1;
+}

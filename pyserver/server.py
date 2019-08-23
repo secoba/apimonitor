@@ -34,14 +34,18 @@ class HelloWorldHandler:
   def testOne(self,msg):
     return "osk"+msg
  
-handler = HelloWorldHandler()
-processor = RpcService.Processor(handler)
-transport = TSocket.TServerSocket('127.0.0.1',19090)
-tfactory = TTransport.TBufferedTransportFactory()
-pfactory = TBinaryProtocol.TBinaryProtocolFactory()
- 
-server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
- 
-print("Starting python server...")
-server.serve()
-print("done!")
+def main():
+  handler = HelloWorldHandler()
+  processor = RpcService.Processor(handler)
+  transport = TSocket.TServerSocket('127.0.0.1',19090)
+  tfactory = TTransport.TBufferedTransportFactory()
+  pfactory = TBinaryProtocol.TBinaryProtocolFactory()
+   
+  server = TServer.TSimpleServer(processor, transport, tfactory, pfactory)
+   
+  print("Starting python server...")
+  server.serve()
+  print("done!")
+
+if __name__ == '__main__':
+  main()

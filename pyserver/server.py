@@ -3,7 +3,7 @@ sys.path.append('./gen-py')
   
 # from helloworld import HelloWorld
 # from helloworld.ttypes import *
- 
+
 
 from testone.rpc import RpcService
 from testone.rpc.ttypes import *
@@ -21,8 +21,8 @@ class HelloWorldHandler:
   def __init__(self):
     self.log = {}
  
-  # def ping(self):
-  #   print ("ping()")
+  def ping(self):
+    print ("ping()")
  
   # def sayHello(self):
   #   # print ("sayHello()")
@@ -31,8 +31,8 @@ class HelloWorldHandler:
   # def sayMsg(self, msg):
   #   # print( "sayMsg:{}".format (msg))
   #   return "say {} from {}".format(msg,socket.gethostbyname(socket.gethostname()))
-  def testOne(self,msg):
-    return "osk"+msg
+  def testOne(self,msg,ip):
+    return "ip={},msg={}".format(ip,msg)
  
 def main():
   handler = HelloWorldHandler()

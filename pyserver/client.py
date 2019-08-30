@@ -40,7 +40,7 @@ try:
   # print(HELLO_YK)
   # print(msg)
   msg = "ceshi"
-  tmp = client.testOne(msg)
+  tmp = client.testOne(msg,"123")
   print(tmp)
  
   transport.close()

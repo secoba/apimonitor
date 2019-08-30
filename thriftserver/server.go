@@ -24,9 +24,9 @@ func (this *RpcServiceImpl) FunCall(callTime int64, funCode string, paramMap map
 	return
 }
 
-func (this *RpcServiceImpl) TestOne(msg string) (r string, err error) {
-	fmt.Println(msg)
-	r = msg
+func (this *RpcServiceImpl) TestOne(msg, ips string) (r string, err error) {
+
+	r = fmt.Sprintf("server:%v,ip:%v", msg, ips)
 	return
 }
 

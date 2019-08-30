@@ -21,7 +21,13 @@ func Usage() {
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
 	fmt.Fprintln(os.Stderr, "   funCall(i64 callTime, string funCode,  paramMap)")
-	fmt.Fprintln(os.Stderr, "  string testOne(string msg)")
+	fmt.Fprintln(os.Stderr, "  string testOne(string msg, string ip)")
+	fmt.Fprintln(os.Stderr, "  string setLog(string msg)")
+	fmt.Fprintln(os.Stderr, "  string Adb()")
+	fmt.Fprintln(os.Stderr, "  string Atx()")
+	fmt.Fprintln(os.Stderr, "  string Order(string app)")
+	fmt.Fprintln(os.Stderr, "  string devIce()")
+	fmt.Fprintln(os.Stderr, "  string dev_UP()")
 	fmt.Fprintln(os.Stderr)
 	os.Exit(0)
 }
@@ -121,27 +127,27 @@ func main() {
 			fmt.Fprintln(os.Stderr, "FunCall requires 3 args")
 			flag.Usage()
 		}
-		argvalue0, err9 := (strconv.ParseInt(flag.Arg(1), 10, 64))
-		if err9 != nil {
+		argvalue0, err21 := (strconv.ParseInt(flag.Arg(1), 10, 64))
+		if err21 != nil {
 			Usage()
 			return
 		}
 		value0 := argvalue0
 		argvalue1 := flag.Arg(2)
 		value1 := argvalue1
-		arg11 := flag.Arg(3)
-		mbTrans12 := thrift.NewTMemoryBufferLen(len(arg11))
-		defer mbTrans12.Close()
-		_, err13 := mbTrans12.WriteString(arg11)
-		if err13 != nil {
+		arg23 := flag.Arg(3)
+		mbTrans24 := thrift.NewTMemoryBufferLen(len(arg23))
+		defer mbTrans24.Close()
+		_, err25 := mbTrans24.WriteString(arg23)
+		if err25 != nil {
 			Usage()
 			return
 		}
-		factory14 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt15 := factory14.GetProtocol(mbTrans12)
+		factory26 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt27 := factory26.GetProtocol(mbTrans24)
 		containerStruct2 := rpc.NewRpcServiceFunCallArgs()
-		err16 := containerStruct2.ReadField3(jsProt15)
-		if err16 != nil {
+		err28 := containerStruct2.ReadField3(jsProt27)
+		if err28 != nil {
 			Usage()
 			return
 		}
@@ -151,13 +157,67 @@ func main() {
 		fmt.Print("\n")
 		break
 	case "testOne":
-		if flag.NArg()-1 != 1 {
-			fmt.Fprintln(os.Stderr, "TestOne requires 1 args")
+		if flag.NArg()-1 != 2 {
+			fmt.Fprintln(os.Stderr, "TestOne requires 2 args")
 			flag.Usage()
 		}
 		argvalue0 := flag.Arg(1)
 		value0 := argvalue0
-		fmt.Print(client.TestOne(value0))
+		argvalue1 := flag.Arg(2)
+		value1 := argvalue1
+		fmt.Print(client.TestOne(value0, value1))
+		fmt.Print("\n")
+		break
+	case "setLog":
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "SetLog requires 1 args")
+			flag.Usage()
+		}
+		argvalue0 := flag.Arg(1)
+		value0 := argvalue0
+		fmt.Print(client.SetLog(value0))
+		fmt.Print("\n")
+		break
+	case "Adb":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "Adb requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.Adb())
+		fmt.Print("\n")
+		break
+	case "Atx":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "Atx requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.Atx())
+		fmt.Print("\n")
+		break
+	case "Order":
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "Order requires 1 args")
+			flag.Usage()
+		}
+		argvalue0 := flag.Arg(1)
+		value0 := argvalue0
+		fmt.Print(client.Order(value0))
+		fmt.Print("\n")
+		break
+	case "devIce":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "DevIce requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.DevIce())
+		fmt.Print("\n")
+		break
+	case "dev_UP":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "Dev_UP requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.Dev_UP())
 		fmt.Print("\n")
 		break
 	case "":

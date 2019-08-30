@@ -25,7 +25,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('')
   print('Functions:')
   print('   funCall(i64 callTime, string funCode,  paramMap)')
-  print('  string testOne(string msg)')
+  print('  string testOne(string msg, string ip)')
   print('')
   sys.exit(0)
 
@@ -89,10 +89,10 @@ if cmd == 'funCall':
   pp.pprint(client.funCall(eval(args[0]),args[1],eval(args[2]),))
 
 elif cmd == 'testOne':
-  if len(args) != 1:
-    print('testOne requires 1 args')
+  if len(args) != 2:
+    print('testOne requires 2 args')
     sys.exit(1)
-  pp.pprint(client.testOne(args[0],))
+  pp.pprint(client.testOne(args[0],args[1],))
 
 else:
   print('Unrecognized method %s' % cmd)

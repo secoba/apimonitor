@@ -63,8 +63,80 @@ func init() {
 
 	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
 		beego.ControllerComments{
-			Method:           "ThriftTest",
-			Router:           `/Test`,
+			Method:           "ActRun",
+			Router:           `/act_run`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "ADB",
+			Router:           `/adb`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "Atx",
+			Router:           `/atx`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "Order",
+			Router:           `/order`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "Device",
+			Router:           `/device`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "Dev_up",
+			Router:           `/dev_up`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "ThriftAtxServer",
+			Router:           `/ThriftAtxServer`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "ThriftAdbServer",
+			Router:           `/ThriftAdbServer`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"] = append(beego.GlobalControllerRouter["github.com/xuchengzhi/apimonitor/controllers:ThriftController"],
+		beego.ControllerComments{
+			Method:           "ThriftActServer",
+			Router:           `/ThriftActServer`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

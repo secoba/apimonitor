@@ -28,10 +28,11 @@ class Iface:
     """
     pass
 
-  def testOne(self, msg):
+  def testOne(self, msg, ip):
     """
     Parameters:
      - msg
+     - ip
     """
     pass
 
@@ -78,18 +79,20 @@ class Client(Iface):
       return result.success
     raise TApplicationException(TApplicationException.MISSING_RESULT, "funCall failed: unknown result")
 
-  def testOne(self, msg):
+  def testOne(self, msg, ip):
     """
     Parameters:
      - msg
+     - ip
     """
-    self.send_testOne(msg)
+    self.send_testOne(msg, ip)
     return self.recv_testOne()
 
-  def send_testOne(self, msg):
+  def send_testOne(self, msg, ip):
     self._oprot.writeMessageBegin('testOne', TMessageType.CALL, self._seqid)
     args = testOne_args()
     args.msg = msg
+    args.ip = ip
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -157,7 +160,7 @@ class Processor(Iface, TProcessor):
     iprot.readMessageEnd()
     result = testOne_result()
     try:
-      result.success = self._handler.testOne(args.msg)
+      result.success = self._handler.testOne(args.msg, args.ip)
       msg_type = TMessageType.REPLY
     except (TTransport.TTransportException, KeyboardInterrupt, SystemExit):
       raise
@@ -350,15 +353,18 @@ class testOne_args:
   """
   Attributes:
    - msg
+   - ip
   """
 
   thrift_spec = (
     None, # 0
     (1, TType.STRING, 'msg', None, None, ), # 1
+    (2, TType.STRING, 'ip', None, None, ), # 2
   )
 
-  def __init__(self, msg=None,):
+  def __init__(self, msg=None, ip=None,):
     self.msg = msg
+    self.ip = ip
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -372,6 +378,11 @@ class testOne_args:
       if fid == 1:
         if ftype == TType.STRING:
           self.msg = iprot.readString()
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.ip = iprot.readString()
         else:
           iprot.skip(ftype)
       else:
@@ -388,6 +399,10 @@ class testOne_args:
       oprot.writeFieldBegin('msg', TType.STRING, 1)
       oprot.writeString(self.msg)
       oprot.writeFieldEnd()
+    if self.ip is not None:
+      oprot.writeFieldBegin('ip', TType.STRING, 2)
+      oprot.writeString(self.ip)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -398,6 +413,7 @@ class testOne_args:
   def __hash__(self):
     value = 17
     value = (value * 31) ^ hash(self.msg)
+    value = (value * 31) ^ hash(self.ip)
     return value
 
   def __repr__(self):

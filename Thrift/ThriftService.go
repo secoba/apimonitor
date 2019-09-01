@@ -4,7 +4,7 @@ package Thrift
 
 import (
 	"fmt"
-	"git.apache.org/thrift.git/lib/go/thrift"
+	"github.com/apache/thrift/lib/go/thrift"
 	// "github.com/xuchengzhi/apimonitor/thriftserver/gen-go/demo/rpc"
 	"github.com/xuchengzhi/apimonitor/thriftserver/gen-go/ThriftServer/rpc"
 	"log"

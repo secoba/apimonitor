@@ -34,7 +34,7 @@ func ActRun(msg, ips string) string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动"
+		return "AutoPay服务未启动"
 	}
 	defer transport.Close()
 
@@ -52,7 +52,7 @@ func ActRun(msg, ips string) string {
 		return r1
 	} else {
 		fmt.Println(e1.Error())
-		return "服务未启动"
+		return "AutoPay服务异常"
 	}
 }
 
@@ -66,7 +66,7 @@ func ADB() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
-		return "服务未启动"
+		return "ADB服务未启动"
 	}
 
 	useTransport := transportFactory.GetTransport(transport)
@@ -75,7 +75,7 @@ func ADB() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动"
+		return "ADB服务未启动"
 	}
 	defer transport.Close()
 	res, e1 := client.Adb()
@@ -83,7 +83,7 @@ func ADB() string {
 		return res
 	} else {
 		fmt.Println(e1.Error())
-		return "服务异常"
+		return "ADB服务异常"
 	}
 
 }
@@ -97,7 +97,7 @@ func Atx() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
-		return "服务未启动"
+		return "Atx服务未启动"
 	}
 
 	useTransport := transportFactory.GetTransport(transport)
@@ -106,7 +106,7 @@ func Atx() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动"
+		return "Atx服务未启动"
 	}
 	defer transport.Close()
 	res, e1 := client.Atx()
@@ -114,7 +114,7 @@ func Atx() string {
 		return res
 	} else {
 		fmt.Println(e1.Error())
-		return "服务未启动"
+		return "Atx服务异常"
 	}
 }
 
@@ -127,7 +127,7 @@ func Order(app string) (string, bool) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
-		return "服务未启动", false
+		return "Order服务未启动", false
 	}
 
 	useTransport := transportFactory.GetTransport(transport)
@@ -136,7 +136,7 @@ func Order(app string) (string, bool) {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动", false
+		return "Order服务未启动", false
 	}
 	defer transport.Close()
 	res, e1 := client.Order(app)
@@ -144,7 +144,7 @@ func Order(app string) (string, bool) {
 		return res, true
 	} else {
 		fmt.Println(e1.Error())
-		return "服务异常", false
+		return "Order服务异常", false
 	}
 }
 
@@ -157,7 +157,7 @@ func Device() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
-		return "服务未启动"
+		return "Device服务未启动"
 	}
 
 	useTransport := transportFactory.GetTransport(transport)
@@ -166,7 +166,7 @@ func Device() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动"
+		return "Device服务未启动"
 	}
 	defer transport.Close()
 	res, e1 := client.DevIce()
@@ -174,7 +174,7 @@ func Device() string {
 		return res
 	} else {
 		fmt.Println(e1.Error())
-		return "服务异常"
+		return "Device服务异常"
 	}
 }
 
@@ -195,7 +195,7 @@ func DevUp() string {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
 		// os.Exit(1)
-		return "服务未启动"
+		return "DevUp服务未启动"
 	}
 	defer transport.Close()
 
@@ -204,7 +204,7 @@ func DevUp() string {
 		return res
 	} else {
 		fmt.Println(e1.Error())
-		return "服务异常"
+		return "DevUp服务异常"
 	}
 }
 

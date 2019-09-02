@@ -118,14 +118,6 @@ func ThriftActServer() string {
 	}
 }
 
-// func main() {
-//  //  startTime := currentTimeMillis()
-//  msg := Run("huawei", "192.168.137.222")
-//  fmt.Println(msg)
-//  //  endTime := currentTimeMillis()
-//  //  fmt.Println("Program exit. time->", endTime, startTime, (endTime - startTime))
-// }
-
 // 转换成毫秒
 func currentTimeMillis() int64 {
 	return time.Now().UnixNano() / 1000000

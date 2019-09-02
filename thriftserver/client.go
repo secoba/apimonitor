@@ -6,18 +6,44 @@ import (
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
 	// "github.com/xuchengzhi/apimonitor/thriftserver/gen-go/demo/rpc"
-	"github.com/xuchengzhi/apimonitor/thriftserver/gen-go/Order/rpc"
+	// "github.com/xuchengzhi/apimonitor/thriftserver/gen-go/Order/rpc"
+	"github.com/xuchengzhi/apimonitor/thriftserver/gen-go/ThriftServer/rpc"
 	// "github.com/xuchengzhi/apimonitor/thriftserver/gen-go/testone/rpc"
 	"net"
 	"os"
 	"time"
 )
 
+// func myTests() {
+// 	transportFactory := thrift.NewTBufferedTransportFactory(10000000)
+// 	protocolFactory := thrift.NewTBinaryProtocolFactoryDefault()
+
+// 	transport, err := thrift.NewTSocket(net.JoinHostPort("192.168.248.188", "10001"))
+// 	if err != nil {
+// 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
+// 		os.Exit(1)
+// 	}
+
+// 	useTransport := transportFactory.GetTransport(transport)
+// 	client := rpc.NewRpcServiceClientFactory(useTransport, protocolFactory)
+// 	err = transport.Open()
+// 	if err != nil {
+// 		fmt.Fprintln(os.Stderr, "Error opening socket to 192.168.248.188:19090", " ", err)
+// 		// os.Exit(1)
+// 		// return "服务未启动"
+// 	}
+// 	defer transport.Close()
+// 	r1, _ := client.Adb()
+// 	fmt.Println(r1)
+
+// }
+
 func myTests() {
 	transportFactory := thrift.NewTBufferedTransportFactory(10000000)
+	// transportFactory := thrift.NewTFramedTransportFactory(thrift.NewTTransportFactory())
 	protocolFactory := thrift.NewTBinaryProtocolFactoryDefault()
 
-	transport, err := thrift.NewTSocket(net.JoinHostPort("192.168.248.188", "10001"))
+	transport, err := thrift.NewTSocket(net.JoinHostPort("192.168.248.188", "11000"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
@@ -32,7 +58,10 @@ func myTests() {
 		// return "服务未启动"
 	}
 	defer transport.Close()
-	r1, _ := client.Adb()
+	r1, err1 := client.AdbServer()
+	if err1 != nil {
+		fmt.Println(err1)
+	}
 	fmt.Println(r1)
 
 }

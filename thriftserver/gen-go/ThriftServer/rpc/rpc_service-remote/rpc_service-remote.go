@@ -24,6 +24,7 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "  string atxServer()")
 	fmt.Fprintln(os.Stderr, "  string adbServer()")
 	fmt.Fprintln(os.Stderr, "  string actServer()")
+	fmt.Fprintln(os.Stderr, "  string javaServer()")
 	fmt.Fprintln(os.Stderr)
 	os.Exit(0)
 }
@@ -123,27 +124,27 @@ func main() {
 			fmt.Fprintln(os.Stderr, "FunCall requires 3 args")
 			flag.Usage()
 		}
-		argvalue0, err13 := (strconv.ParseInt(flag.Arg(1), 10, 64))
-		if err13 != nil {
+		argvalue0, err15 := (strconv.ParseInt(flag.Arg(1), 10, 64))
+		if err15 != nil {
 			Usage()
 			return
 		}
 		value0 := argvalue0
 		argvalue1 := flag.Arg(2)
 		value1 := argvalue1
-		arg15 := flag.Arg(3)
-		mbTrans16 := thrift.NewTMemoryBufferLen(len(arg15))
-		defer mbTrans16.Close()
-		_, err17 := mbTrans16.WriteString(arg15)
-		if err17 != nil {
+		arg17 := flag.Arg(3)
+		mbTrans18 := thrift.NewTMemoryBufferLen(len(arg17))
+		defer mbTrans18.Close()
+		_, err19 := mbTrans18.WriteString(arg17)
+		if err19 != nil {
 			Usage()
 			return
 		}
-		factory18 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt19 := factory18.GetProtocol(mbTrans16)
+		factory20 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt21 := factory20.GetProtocol(mbTrans18)
 		containerStruct2 := rpc.NewRpcServiceFunCallArgs()
-		err20 := containerStruct2.ReadField3(jsProt19)
-		if err20 != nil {
+		err22 := containerStruct2.ReadField3(jsProt21)
+		if err22 != nil {
 			Usage()
 			return
 		}
@@ -174,6 +175,14 @@ func main() {
 			flag.Usage()
 		}
 		fmt.Print(client.ActServer())
+		fmt.Print("\n")
+		break
+	case "javaServer":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "JavaServer requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.JavaServer())
 		fmt.Print("\n")
 		break
 	case "":

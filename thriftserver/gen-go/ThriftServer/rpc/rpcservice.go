@@ -23,6 +23,7 @@ type RpcService interface {
 	AtxServer() (r string, err error)
 	AdbServer() (r string, err error)
 	ActServer() (r string, err error)
+	JavaServer() (r string, err error)
 }
 
 type RpcServiceClient struct {
@@ -351,6 +352,79 @@ func (p *RpcServiceClient) recvActServer() (value string, err error) {
 	return
 }
 
+func (p *RpcServiceClient) JavaServer() (r string, err error) {
+	if err = p.sendJavaServer(); err != nil {
+		return
+	}
+	return p.recvJavaServer()
+}
+
+func (p *RpcServiceClient) sendJavaServer() (err error) {
+	oprot := p.OutputProtocol
+	if oprot == nil {
+		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.OutputProtocol = oprot
+	}
+	p.SeqId++
+	if err = oprot.WriteMessageBegin("javaServer", thrift.CALL, p.SeqId); err != nil {
+		return
+	}
+	args := RpcServiceJavaServerArgs{}
+	if err = args.Write(oprot); err != nil {
+		return
+	}
+	if err = oprot.WriteMessageEnd(); err != nil {
+		return
+	}
+	return oprot.Flush()
+}
+
+func (p *RpcServiceClient) recvJavaServer() (value string, err error) {
+	iprot := p.InputProtocol
+	if iprot == nil {
+		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.InputProtocol = iprot
+	}
+	method, mTypeId, seqId, err := iprot.ReadMessageBegin()
+	if err != nil {
+		return
+	}
+	if method != "javaServer" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "javaServer failed: wrong method name")
+		return
+	}
+	if p.SeqId != seqId {
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "javaServer failed: out of sequence response")
+		return
+	}
+	if mTypeId == thrift.EXCEPTION {
+		error8 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error9 error
+		error9, err = error8.Read(iprot)
+		if err != nil {
+			return
+		}
+		if err = iprot.ReadMessageEnd(); err != nil {
+			return
+		}
+		err = error9
+		return
+	}
+	if mTypeId != thrift.REPLY {
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "javaServer failed: invalid message type")
+		return
+	}
+	result := RpcServiceJavaServerResult{}
+	if err = result.Read(iprot); err != nil {
+		return
+	}
+	if err = iprot.ReadMessageEnd(); err != nil {
+		return
+	}
+	value = result.GetSuccess()
+	return
+}
+
 type RpcServiceProcessor struct {
 	processorMap map[string]thrift.TProcessorFunction
 	handler      RpcService
@@ -371,12 +445,13 @@ func (p *RpcServiceProcessor) ProcessorMap() map[string]thrift.TProcessorFunctio
 
 func NewRpcServiceProcessor(handler RpcService) *RpcServiceProcessor {
 
-	self8 := &RpcServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self8.processorMap["funCall"] = &rpcServiceProcessorFunCall{handler: handler}
-	self8.processorMap["atxServer"] = &rpcServiceProcessorAtxServer{handler: handler}
-	self8.processorMap["adbServer"] = &rpcServiceProcessorAdbServer{handler: handler}
-	self8.processorMap["actServer"] = &rpcServiceProcessorActServer{handler: handler}
-	return self8
+	self10 := &RpcServiceProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self10.processorMap["funCall"] = &rpcServiceProcessorFunCall{handler: handler}
+	self10.processorMap["atxServer"] = &rpcServiceProcessorAtxServer{handler: handler}
+	self10.processorMap["adbServer"] = &rpcServiceProcessorAdbServer{handler: handler}
+	self10.processorMap["actServer"] = &rpcServiceProcessorActServer{handler: handler}
+	self10.processorMap["javaServer"] = &rpcServiceProcessorJavaServer{handler: handler}
+	return self10
 }
 
 func (p *RpcServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -389,12 +464,12 @@ func (p *RpcServiceProcessor) Process(iprot, oprot thrift.TProtocol) (success bo
 	}
 	iprot.Skip(thrift.STRUCT)
 	iprot.ReadMessageEnd()
-	x9 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
+	x11 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
 	oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-	x9.Write(oprot)
+	x11.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
-	return false, x9
+	return false, x11
 
 }
 
@@ -590,6 +665,54 @@ func (p *rpcServiceProcessorActServer) Process(seqId int32, iprot, oprot thrift.
 	return true, err
 }
 
+type rpcServiceProcessorJavaServer struct {
+	handler RpcService
+}
+
+func (p *rpcServiceProcessorJavaServer) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := RpcServiceJavaServerArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("javaServer", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	result := RpcServiceJavaServerResult{}
+	var retval string
+	var err2 error
+	if retval, err2 = p.handler.JavaServer(); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing javaServer: "+err2.Error())
+		oprot.WriteMessageBegin("javaServer", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return true, err2
+	} else {
+		result.Success = &retval
+	}
+	if err2 = oprot.WriteMessageBegin("javaServer", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
+}
+
 // HELPER FUNCTIONS AND STRUCTURES
 
 // Attributes:
@@ -684,19 +807,19 @@ func (p *RpcServiceFunCallArgs) readField3(iprot thrift.TProtocol) error {
 	tMap := make(map[string]string, size)
 	p.ParamMap = tMap
 	for i := 0; i < size; i++ {
-		var _key10 string
+		var _key12 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key10 = v
+			_key12 = v
 		}
-		var _val11 string
+		var _val13 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_val11 = v
+			_val13 = v
 		}
-		p.ParamMap[_key10] = _val11
+		p.ParamMap[_key12] = _val13
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -843,13 +966,13 @@ func (p *RpcServiceFunCallResult) readField0(iprot thrift.TProtocol) error {
 	tSlice := make([]string, 0, size)
 	p.Success = tSlice
 	for i := 0; i < size; i++ {
-		var _elem12 string
+		var _elem14 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_elem12 = v
+			_elem14 = v
 		}
-		p.Success = append(p.Success, _elem12)
+		p.Success = append(p.Success, _elem14)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -1366,4 +1489,159 @@ func (p *RpcServiceActServerResult) String() string {
 		return "<nil>"
 	}
 	return fmt.Sprintf("RpcServiceActServerResult(%+v)", *p)
+}
+
+type RpcServiceJavaServerArgs struct {
+}
+
+func NewRpcServiceJavaServerArgs() *RpcServiceJavaServerArgs {
+	return &RpcServiceJavaServerArgs{}
+}
+
+func (p *RpcServiceJavaServerArgs) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		if err := iprot.Skip(fieldTypeId); err != nil {
+			return err
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *RpcServiceJavaServerArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("javaServer_args"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *RpcServiceJavaServerArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("RpcServiceJavaServerArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type RpcServiceJavaServerResult struct {
+	Success *string `thrift:"success,0" json:"success,omitempty"`
+}
+
+func NewRpcServiceJavaServerResult() *RpcServiceJavaServerResult {
+	return &RpcServiceJavaServerResult{}
+}
+
+var RpcServiceJavaServerResult_Success_DEFAULT string
+
+func (p *RpcServiceJavaServerResult) GetSuccess() string {
+	if !p.IsSetSuccess() {
+		return RpcServiceJavaServerResult_Success_DEFAULT
+	}
+	return *p.Success
+}
+func (p *RpcServiceJavaServerResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *RpcServiceJavaServerResult) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 0:
+			if err := p.readField0(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *RpcServiceJavaServerResult) readField0(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 0: ", err)
+	} else {
+		p.Success = &v
+	}
+	return nil
+}
+
+func (p *RpcServiceJavaServerResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("javaServer_result"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := p.writeField0(oprot); err != nil {
+		return err
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *RpcServiceJavaServerResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
+		}
+		if err := oprot.WriteString(string(*p.Success)); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T.success (0) field write error: ", p), err)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err)
+		}
+	}
+	return err
+}
+
+func (p *RpcServiceJavaServerResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("RpcServiceJavaServerResult(%+v)", *p)
 }

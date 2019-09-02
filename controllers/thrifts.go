@@ -88,3 +88,9 @@ func (this *ThriftController) ThriftActServer() {
 	this.Data["json"] = Response{200, "success", res}
 	this.ServeJSON()
 }
+
+func (this *ThriftController) ThriftJavaServer() {
+	res := Thrift.ThriftJavaServer()
+	this.Data["json"] = Response{200, "success", res}
+	this.ServeJSON()
+}

@@ -1,7 +1,7 @@
-thrift  -r  --gen py  autopay.thrift 
+thrift  -r  --gen py  ThriftServer.thrift 
 
-thrift  -r  --gen go  autopay.thrift
+thrift  -r  --gen go  ThriftServer.thrift
 
-thrift  -r  --gen java  autopay.thrift
+thrift  -r  --gen java  ThriftServer.thrift
 
 @pause

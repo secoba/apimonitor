@@ -2,10 +2,12 @@ import sys
 sys.path.append('./gen-py')
 
 
-from Order.rpc import RpcService
-from Order.rpc.ttypes import *
-from Order.rpc.constants import *
-
+# from Order.rpc import RpcService
+# from Order.rpc.ttypes import *
+# from Order.rpc.constants import *
+from ThriftServer.rpc import RpcService
+from ThriftServer.rpc.ttypes import *
+from ThriftServer.rpc.constants import *
 
 from thrift import Thrift
 from thrift.transport import TSocket
@@ -15,8 +17,7 @@ from thrift.protocol import TBinaryProtocol
 
 def main():
   try:
-    # 建立socket连接
-    transport = TSocket.TSocket('192.168.248.188', 10001)
+    transport = TSocket.TSocket('192.168.248.188', 11000)
    
     # Buffering is critical. Raw sockets are very slow
     transport = TTransport.TBufferedTransport(transport)
@@ -44,14 +45,13 @@ def main():
 
     # devs = client.devIce()
 
-    print(client.Adb())
+    print(client.adbServer())
 
     # print(order,atx,adb,res,devs)
     transport.close()
 
   except Thrift.TException as tx:
     print(tx)
-    print("服务未启动")
 
 if __name__ == '__main__':
     main()

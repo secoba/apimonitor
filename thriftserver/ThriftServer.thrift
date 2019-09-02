@@ -1,6 +1,7 @@
 namespace go ThriftServer.rpc
 namespace java ThriftServer.rpc
 namespace py ThriftServer.rpc
+namespace php ThriftServer.rpc
 
 // 测试服务
 service RpcService {
@@ -10,4 +11,5 @@ service RpcService {
     string atxServer(),
     string adbServer(),
     string actServer(),
+    string javaServer(),
 }

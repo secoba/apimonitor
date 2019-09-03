@@ -32,4 +32,6 @@ func init() {
 	)
 
 	beego.AddNamespace(ns)
+	beego.BConfig.WebConfig.Session.SessionOn = true
+	beego.BConfig.WebConfig.Session.SessionName = "sessionID"
 }

@@ -11,24 +11,44 @@ type ThriftController struct {
 	BaseController
 }
 
+// @Title Get
+// @Description get paasid info from API
+// @Param paasid path string true "The paasid name"
+// @Param field query string true "field"
+// @Success 201 {object} models.PaaSIdInfo
+// @Failure 400 {object} models.StatusResponse
+// @router /paas/:paasid [get]
 func (this *ThriftController) ActRun() {
 	msg := this.GetString("app")
 	ips := this.GetString("ip")
 	log.Println(ips)
 	res := Thrift.ActRun(msg, ips)
-	this.Data["json"] = Response{200, "success", res}
+	if res != "AutoPay服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
 	this.ServeJSON()
 }
 
 func (this *ThriftController) ADB() {
 	res := Thrift.ADB()
-	this.Data["json"] = Response{200, "success", res}
+	if res != "ADB服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
 	this.ServeJSON()
 }
 
 func (this *ThriftController) Atx() {
 	res := Thrift.Atx()
-	this.Data["json"] = Response{200, "success", res}
+	log.Println(res)
+	if res != "Atx服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
 	this.ServeJSON()
 }
 
@@ -59,33 +79,84 @@ func (this *ThriftController) Order() {
 	this.ServeJSON()
 }
 
+type DevJson struct {
+	Status bool `json:"status"`
+	Data   []struct {
+		Mod     string `json:"mod"`
+		Port    string `json:"port"`
+		Version string `json:"version"`
+		Memory  string `json:"memory"`
+		CPU     string `json:"cpu"`
+		Level   string `json:"level"`
+		Sdk     string `json:"sdk"`
+		IP      string `json:"ip"`
+		Online  bool   `json:"Online"`
+		Name    string `json:"name"`
+		Img     string `json:"img"`
+	} `json:"data"`
+}
+
 func (this *ThriftController) Device() {
 	res := Thrift.Device()
-	this.Data["json"] = Response{200, "success", res}
+
+	if res != "Device服务未启动" {
+
+		resstr := strings.Replace(res, "'", "\"", -1)
+		log.Println(resstr)
+		var dat DevJson
+		if err := json.Unmarshal([]byte(resstr), &dat); err == nil {
+			this.Data["json"] = Response{200, "success", dat.Data}
+		} else {
+			this.Data["json"] = Response{2002, "error", "json格式化异常"}
+			log.Println(err.Error())
+		}
+
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
+
 	this.ServeJSON()
 }
 
 func (this *ThriftController) Dev_up() {
 	res := Thrift.DevUp()
-	this.Data["json"] = Response{200, "success", res}
+	if res != "DevUp服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
+
 	this.ServeJSON()
 }
 
 func (this *ThriftController) ThriftAtxServer() {
 	res := Thrift.ThriftAtxServer()
-	this.Data["json"] = Response{200, "success", res}
+	if res != "ThriftService服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
+	// this.Data["json"] = Response{200, "success", res}
 	this.ServeJSON()
 }
 
 func (this *ThriftController) ThriftAdbServer() {
 	res := Thrift.ThriftAdbServer()
-	this.Data["json"] = Response{200, "success", res}
+	if res != "ThriftService服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
 	this.ServeJSON()
 }
 
 func (this *ThriftController) ThriftActServer() {
 	res := Thrift.ThriftActServer()
-	this.Data["json"] = Response{200, "success", res}
+	if res != "ThriftService服务未启动" {
+		this.Data["json"] = Response{200, "success", res}
+	} else {
+		this.Data["json"] = Response{2001, "success", res}
+	}
 	this.ServeJSON()
 }
 

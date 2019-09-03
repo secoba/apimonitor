@@ -17,7 +17,7 @@ func ThriftJavaServer() string {
 	transportFactory := thrift.NewTFramedTransportFactory(thrift.NewTTransportFactory())
 	protocolFactory := thrift.NewTBinaryProtocolFactoryDefault()
 
-	transport, err := thrift.NewTSocket(net.JoinHostPort(thriftip, "11000"))
+	transport, err := thrift.NewTSocket(net.JoinHostPort("192.168.248.249", "11000"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)

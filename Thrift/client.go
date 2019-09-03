@@ -93,7 +93,7 @@ func Atx() string {
 	transportFactory := thrift.NewTBufferedTransportFactory(10000000)
 	protocolFactory := thrift.NewTBinaryProtocolFactoryDefault()
 
-	transport, err := thrift.NewTSocket(net.JoinHostPort(thriftip, "19092"))
+	transport, err := thrift.NewTSocket(net.JoinHostPort(thriftip, "19090"))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error resolving address:", err)
 		os.Exit(1)
@@ -111,6 +111,7 @@ func Atx() string {
 	defer transport.Close()
 	res, e1 := client.Atx()
 	if e1 == nil {
+		log.Println(res)
 		return res
 	} else {
 		fmt.Println(e1.Error())
